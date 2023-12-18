@@ -10,3 +10,7 @@
 *.Rproj
 *.rds
 *.xlsx
+
+!GridPolys.csv
+!Grids.csv
+!LFAPolys.csv
