@@ -26,7 +26,7 @@ These scripts require several packages including:
 	(bio.lobster) #github.com/LobsterScience/bio.lobster
 	(bio.utilities) #github.com/amcook/bio.utilities
 	(lubridate)
-  (tint)
+ 	(tint)
 	(rmarkdown)
 	(PBSmapping)
 	(rio)
