@@ -11,7 +11,7 @@ Scripts/       R scripts for running reports and uploading. There are also a cou
 SummaryOfTrips/ Compiled data ready for uploading to oracle
 TripsRun/       All trips that have been run through the vaidation scripts (from NewTrips) migrate to this folder
 
-#WorkFlow
+# WorkFlow
 Step 1: download or copy all trips that need to be evaulated into the NewTrips folder. Each trip should be its own file, ideally a .csv but if not the code will generate a .csv from an .xlsx (so long as it is only one sheet)
 Step 2: Open Scripts/1.RunScript.r this file needs to be run from top to bottom. You will need to fill in the file path where the folder structure of BycatchQC lives. This script loops through each trip file (.csv) and produces a report. It also moves the files from NewTrips to TripsRun folders.
 
@@ -19,7 +19,7 @@ Step 3: Open 2.UploadTripsToOracle.r You will need to have an Oracle account for
 
 Optional Step 4: Open 3.SummarizeTrips.r Prepare data summaries if desired. More could be added here
 
-#Dependencies
+# Dependencies
 These scripts require several packages including:
 
 	(ROracle)
