@@ -3,12 +3,12 @@ QC checks and data uploading for bycatch data from DFO
 
 # Folder structure
 Folders are structured to maintain a clean workflow
-MapFiles/      contains the polygons for mapping and ensuring the coordinates from the data submission are within the allocated Lobster Fishing Area
-Markdown/      contains the .rmd for evaulating each trip and producing a .pdf
-NewTrips/      this folder is where you paste new trips that need to be run through scripts
-Reports/       location of Markdown reports
-Scripts/       R scripts for running reports and uploading. There are also a couple of helper scripts
-SummaryOfTrips/ Compiled data ready for uploading to oracle
+MapFiles/      contains the polygons for mapping and ensuring the coordinates from the data submission are within the allocated Lobster Fishing Area //
+Markdown/      contains the .rmd for evaulating each trip and producing a .pdf //
+NewTrips/      this folder is where you paste new trips that need to be run through scripts//
+Reports/       location of Markdown reports//
+Scripts/       R scripts for running reports and uploading. There are also a couple of helper scripts//
+SummaryOfTrips/ Compiled data ready for uploading to oracle//
 TripsRun/       All trips that have been run through the vaidation scripts (from NewTrips) migrate to this folder
 
 # WorkFlow
