@@ -2,7 +2,7 @@
 QC checks and data uploading for bycatch data from DFO
 
 # Folder structure
-Folders are structured to maintain a clean workflow
+Folders are structured to maintain a clean workflow  
 MapFiles/      contains the polygons for mapping and ensuring the coordinates from the data submission are within the allocated Lobster Fishing Area   
 Markdown/      contains the .rmd for evaulating each trip and producing a .pdf   
 NewTrips/      this folder is where you paste new trips that need to be run through scripts  
