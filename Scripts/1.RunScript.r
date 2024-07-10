@@ -17,13 +17,13 @@
 	require(rio)
 	options(stringsAsFactors = F)
 
-fd = file.path('C:/Users/cooka')
+fd = file.path('C:/Users/cooka/Documents/git/BycatchQC/')
 	setwd(fd)
 
    	lfas<-	LFAS<-read.csv(file.path("MapFiles","LFAPolys.csv"))
     	LFAGrid<-read.csv(file.path("MapFiles","GridPolys.csv"))
  		source('Scripts/LobrMap.r')
-	   coa<- read.csv(file.path("..","MapFiles","shorelineHR.csv"))
+	   coa<- read.csv(file.path("MapFiles","shorelineHR.csv"))
        
 
 cleanRmd <- function(RmdName = 'BycatchTripValidation', RmdFolder = 'Markdown') {
@@ -57,7 +57,6 @@ cleanRmd <- function(RmdName = 'BycatchTripValidation', RmdFolder = 'Markdown') 
   				dat$COMAREA_ID = toupper(dat$COMAREA_ID)
   				rmarkdown::render('Markdown/BycatchTripValidation.Rmd',quiet=T)
   				file.rename(from = file.path('Markdown','BycatchTripValidation.pdf'), to = file.path('Reports',grp[1],nm))
-  				cleanRmd()
   				file.rename(from = file.path('NewTrips',Fi[ii]), to = file.path('TripsRun',grp[1],Fi[ii]))
   				rm(dat)
   			}
