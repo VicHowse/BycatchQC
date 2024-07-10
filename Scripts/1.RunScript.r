@@ -22,7 +22,7 @@ fd = file.path('C:/Users/cooka')
 
    		LFAS<-read.csv(file.path("MapFiles","LFAPolys.csv"))
     	LFAGrid<-read.csv(file.path("MapFiles","GridPolys.csv"))
- 
+ 		source('Scripts/LobrMap.r')
 
 cleanRmd <- function(RmdName = 'BycatchTripValidation', RmdFolder = 'Markdown') {
 					unlink(file.path(RmdFolder,paste(RmdName,'_cache',sep="")),recursive=T)

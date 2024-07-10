@@ -17,7 +17,7 @@ output: tint::tintPdf
     ylim = c(min(dat$Y,na.rm=T)-0.5, max(dat$Y,na.rm=T)+0.5)
 
     x11(10,10)
-    LobsterMap(ylim=ylim ,xlim=xlim, labels = 'lfa')
+    LobrMap(ylim=ylim ,xlim=xlim, labels = 'lfa')
     attr(dat,"projection") <- "LL"
     addPoints(na.omit(dat[,c('X','Y','EID')]), pch = 21, cex=1.5, bg='red')
 
