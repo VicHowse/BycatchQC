@@ -20,9 +20,11 @@
 fd = file.path('C:/Users/cooka')
 	setwd(fd)
 
-   		LFAS<-read.csv(file.path("MapFiles","LFAPolys.csv"))
+   	lfas<-	LFAS<-read.csv(file.path("MapFiles","LFAPolys.csv"))
     	LFAGrid<-read.csv(file.path("MapFiles","GridPolys.csv"))
  		source('Scripts/LobrMap.r')
+	   coa<- read.csv(file.path("..","MapFiles","shorelineHR.csv"))
+       
 
 cleanRmd <- function(RmdName = 'BycatchTripValidation', RmdFolder = 'Markdown') {
 					unlink(file.path(RmdFolder,paste(RmdName,'_cache',sep="")),recursive=T)

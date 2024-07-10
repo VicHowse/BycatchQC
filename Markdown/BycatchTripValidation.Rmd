@@ -8,16 +8,15 @@ output: tint::tintPdf
 
 **1. Data was collected**
 ```{r echo =FALSE, message =FALSE, error = FALSE, warning = FALSE, results='asis' , fig-main, fig.width=10, fig.height=12,  cache=TRUE,}
-
+  
     dat$Y<- convert.dd.dddd(dat$LATDDMM, format="dec.deg")
     dat$X<- convert.dd.dddd(dat$LONGDDMM, format="dec.deg")*-1
     dat$EID<- 1:nrow(dat)
 
     xlim = c(min(dat$X,na.rm=T)-0.5, max(dat$X,na.rm=T)+0.5)
     ylim = c(min(dat$Y,na.rm=T)-0.5, max(dat$Y,na.rm=T)+0.5)
-
-    x11(10,10)
-    LobrMap(ylim=ylim ,xlim=xlim, labels = 'lfa')
+   
+    LobrMap(ylim=ylim ,xlim=xlim, coast=coa,LFAs=lfas)
     attr(dat,"projection") <- "LL"
     addPoints(na.omit(dat[,c('X','Y','EID')]), pch = 21, cex=1.5, bg='red')
 
@@ -192,7 +191,7 @@ output: tint::tintPdf
 
 
 **8. Were any lobster kept below the MLS for the given LFA?**
-      ```{r echo= FALSE, results = 'asis'}
+```{r echo= FALSE, results = 'asis'}
       MLS=82.5
       dat$smallretained <-0
 
