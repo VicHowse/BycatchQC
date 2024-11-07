@@ -17,11 +17,8 @@
 	require(rio)
 	options(stringsAsFactors = F)
 
-<<<<<<< HEAD
 fd = file.path('C:/Users/HowseVJ/Documents/GitHub/BycatchQC')
-=======
-fd = file.path('C:/Users/cooka/Documents/git/BycatchQC/')
->>>>>>> 88623f6aa926d3739be605ba815097fb7edee604
+
 	setwd(fd)
 
    	lfas<-	LFAS<-read.csv(file.path("MapFiles","LFAPolys.csv"))
