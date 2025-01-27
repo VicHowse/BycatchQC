@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.7)  12 NOV 2024 12:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.7)  6 JAN 2025 10:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**BycatchTripValidation.tex
-(./BycatchTripValidation.tex
+**BycatchTripValidation_v2.tex
+(./BycatchTripValidation_v2.tex
 LaTeX2e <2024-11-01>
 L3 programming layer <2024-11-02>
 (c:/Users/HowseVJ/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tufte-latex/tufte-handout.cls
@@ -280,7 +280,7 @@ LaTeX Info: Redefining \cite on input line 694.
 ) (c:/Users/HowseVJ/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/natbib/bibentry.sty
 Package: bibentry 2007/10/30 1.5 (PWD)
 )
-No file BycatchTripValidation.bbl.
+No file BycatchTripValidation_v2.bbl.
 \c@@tufte@num@bibkeys=\count294
 (c:/Users/HowseVJ/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/sauerj/optparams.sty
 Package: optparams 2004/08/14 v0.9 multiple optional parameters in macros
@@ -558,8 +558,8 @@ LaTeX Font Info:    Font shape `T1/Roboto-LF/condensed/n' will be
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count322
 \l__pdf_internal_box=\box107
-) (./BycatchTripValidation.aux)
-\openout1 = `BycatchTripValidation.aux'.
+) (./BycatchTripValidation_v2.aux)
+\openout1 = `BycatchTripValidation_v2.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 209.
 LaTeX Font Info:    ... okay on input line 209.
@@ -580,9 +580,9 @@ LaTeX Font Info:    ... okay on input line 209.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 209.
 LaTeX Font Info:    ... okay on input line 209.
 Package hyperref Info: Link coloring ON on input line 209.
-(./BycatchTripValidation.out) (./BycatchTripValidation.out)
+(./BycatchTripValidation_v2.out) (./BycatchTripValidation_v2.out)
 \@outlinefile=\write3
-\openout3 = `BycatchTripValidation.out'.
+\openout3 = `BycatchTripValidation_v2.out'.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -643,44 +643,35 @@ LaTeX Font Info:    Font shape `T1/Roboto-LF/lc/n' aliased to
 (Font)              `T1/Roboto-LF/lightcondensed/n' on input line 211.
 LaTeX Font Info:    Font shape `T1/Roboto-LF/lightcondensed/n' will be
 (Font)              scaled to size 12.0pt on input line 211.
-<BycatchTripValidation_files/figure-latex/fig-main-1.pdf, id=4, 521.95pt x 756.8275pt>
-File: BycatchTripValidation_files/figure-latex/fig-main-1.pdf Graphic file (type pdf)
-<use BycatchTripValidation_files/figure-latex/fig-main-1.pdf>
-Package pdftex.def Info: BycatchTripValidation_files/figure-latex/fig-main-1.pdf  used on input line 218.
-(pdftex.def)             Requested size: 312.00165pt x 452.4024pt.
+<BycatchTripValidation_v2_files/figure-latex/fig-main-1.pdf, id=4, 523.9575pt x 756.8275pt>
+File: BycatchTripValidation_v2_files/figure-latex/fig-main-1.pdf Graphic file (type pdf)
+<use BycatchTripValidation_v2_files/figure-latex/fig-main-1.pdf>
+Package pdftex.def Info: BycatchTripValidation_v2_files/figure-latex/fig-main-1.pdf  used on input line 218.
+(pdftex.def)             Requested size: 312.01042pt x 450.68172pt.
 
-Overfull \hbox (12.00165pt too wide) in paragraph at lines 218--219
+Overfull \hbox (12.01042pt too wide) in paragraph at lines 218--219
 [][]  
- []
-
-
-Overfull \hbox (5.30147pt too wide) in paragraph at lines 227--228
-[][]\T1/Roboto-LF/condensed/n/10 Trip File Name does not match TRIP col-umn in Data Sheet. Check Trip105553- 
  []
 
 
 
 [1
 
-{c:/Users/HowseVJ/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/HowseVJ/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/roboto/rbto_b5rac7.enc} <./BycatchTripValidation_files/figure-latex/fig-main-1.pdf>]
+{c:/Users/HowseVJ/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/HowseVJ/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/roboto/rbto_b5rac7.enc} <./BycatchTripValidation_v2_files/figure-latex/fig-main-1.pdf>]
 
 
 Class tufte-handout Warning: Proper spacing of small-caps letters has not been set up.
-This message occurred on input line 326.
+This message occurred on input line 320.
 
 [2]
-
-Package bibentry Warning: You have used \nobibliography* 
-(bibentry)                without a following \bibliography.
-(bibentry)                You may not be able to run BibTeX.
-
+No file BycatchTripValidation_v2.bbl.
 
 
 
 Class tufte-handout Warning: Proper spacing of small-caps letters has not been set up.
-This message occurred on input line 346.
+This message occurred on input line 350.
 
-[3] (./BycatchTripValidation.aux)
+[3] (./BycatchTripValidation_v2.aux)
  ***********
 LaTeX2e <2024-11-01>
 L3 programming layer <2024-11-02>
@@ -688,19 +679,19 @@ L3 programming layer <2024-11-02>
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package rerunfilecheck Info: File `BycatchTripValidation.out' has not changed.
+Package rerunfilecheck Info: File `BycatchTripValidation_v2.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
  13997 strings out of 475321
- 225788 string characters out of 5768391
- 633624 words of memory out of 5000000
+ 225878 string characters out of 5768391
+ 633639 words of memory out of 5000000
  36610 multiletter control sequences out of 15000+600000
  584318 words of font info for 47 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 96i,12n,97p,274b,470s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 96i,12n,97p,277b,470s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/HowseVJ/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/google/roboto/RobotoCondensed-Bold.pfb><c:/Users/HowseVJ/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/google/roboto/RobotoCondensed-Light.pfb><c:/Users/HowseVJ/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/google/roboto/RobotoCondensed-Regular.pfb>
-Output written on BycatchTripValidation.pdf (3 pages, 101373 bytes).
+Output written on BycatchTripValidation_v2.pdf (3 pages, 109910 bytes).
 PDF statistics:
  46 PDF objects out of 1000 (max. 8388607)
  31 compressed objects within 1 object stream

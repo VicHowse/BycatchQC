@@ -3,6 +3,7 @@
 title: "Bycatch Data Submission"
 author: "Lobster Group, Science Branch "
 output: tint::tintPdf
+bibliography: references.bib
 ---
 
 
@@ -25,18 +26,95 @@ output: tint::tintPdf
     ll<-substr(ll,2,lll)
     title(paste0("LFA", ll))
 ```
-  
+
 **2. What group entered the data and the name of the data file that was imported**
-```{r echo=FALSE, results='asis'}
-    cat(paste("<br> <ul>", unique(dat$OWNER_GROUP),unique(dat$TRIP),"</br> </ul>"))  
-    if(!grepl(unique(dat$TRIP),nm)){
-          print(paste("<br><ul> \textcolor{red}{Trip File Name does not match TRIP column in Data Sheet. Check ",Fi[i],"} </br></ul>",sep=" "))
-      }
-      
+```{r  echo=FALSE, results = 'asis'}
+cat(paste(" ", unique(dat$OWNER_GROUP), unique(dat$TRIP), " "))  
+if(!grepl(unique(dat$TRIP), nm)){
+  cat(paste(" \\textcolor{red}{Trip File Name does not match TRIP column in Data Sheet. Check ", Fi[i], "} ", sep=" "))
+}
+
 ``` 
 
+**3. Does the Trip Name match the licence Number**
+```{r  echo=FALSE, results = 'asis'}
 
- **3. Do the coordinates match the Grids and LFA?**
+# Extract the part before the hyphen and remove leading zeros
+dat$TRIP_PREFIX <- sub("^0+", "", sub("-.*", "", dat$TRIP))
+
+# Check if TRIP_PREFIX matches LICENSE_NO
+dat$match <- dat$TRIP_PREFIX == dat$LICENSE_NO
+
+# Filter out mismatched rows
+mismatch_data <- dat[dat$match == FALSE, ]
+
+# Output results
+if (nrow(mismatch_data) > 0) {
+  cat("\\textcolor{red}{No: Trip name does not match the license number.}")
+} else {
+  cat("\\textcolor{black}{Yes: All trip names match the license numbers.}")
+}
+
+```
+
+**4. Does the Trip Name match the Boarding Date**
+```{r echo=FALSE, results = 'asis'}
+# Ensure BOARD_DATE is in Date format
+dat$BOARD_DATE <- as.Date(dat$BOARD_DATE, format = "%Y-%m-%d")
+
+# Extract the date part from TRIP
+dat$TRIP_DATE <- sub(".*-", "", dat$TRIP)
+
+# Format BOARD_DATE to match the format in TRIP_DATE
+dat$BOARD_DATE_FORMATTED <- format(dat$BOARD_DATE, "%d%m%y")
+
+# Check for mismatches
+dat$date_match <- dat$TRIP_DATE == dat$BOARD_DATE_FORMATTED
+date_mismatch_data <- dat[dat$date_match == FALSE, ]
+
+# Print results using LaTeX for coloring
+if (nrow(date_mismatch_data) > 0) {
+  cat("\\textcolor{red}{No: Trip name does not match the boarding date.}")
+} else {
+  cat("\\textcolor{black}{Yes: Trip name matches the boarding date.}")
+}
+```
+
+**5. Is the Number Hook Haul column populated? Can't be NA.**
+```{r echo=FALSE, results = 'asis'}
+na_indices <- which(is.na(dat$NUM_HOOK_HAUL))
+
+
+if (length(na_indices) > 0) {
+  cat("\\textcolor{red}{NUM HOOK HAUL Can't have NA, check lines: ", paste(na_indices, collapse = ", "), "}")
+} else {
+  cat("\\textcolor{black}{Number Hook Haul values are good}")
+}
+```
+
+**6. Are Fish Numbers duplicated? **
+```{r  echo=FALSE, results = 'asis'}
+duplicated_fish_no <- dat$FISH_NO[duplicated(dat$FISH_NO)]
+
+if (length(duplicated_fish_no) > 0) {
+  cat("\\textcolor{red}{Values in FISH NO are repeated check fish number(s) are unique in data: ", paste(unique(duplicated_fish_no), collapse = ", "), "}")
+} else {
+  cat("\\textcolor{black}{No duplicated fish numbers}")
+}
+```
+
+**7. Are Soak Days within reasonable range?**
+```{r  echo=FALSE, results = 'asis'}
+high_soak_days <- which(dat$SOAK_DAYS >= 15)
+
+if (length(high_soak_days) > 0) {
+  cat("\\textcolor{orange}{Soak Days are high, double check data sheet to ensure values are correct. Check Lines: ", paste(high_soak_days, collapse = ", "), "}")
+} else {
+  cat("\\textcolor{black}{SOAK DAYS values are within the normal range}")
+}
+```
+
+ **8. Do the coordinates match the Grids and LFA?**
 ```{r  echo=FALSE, results = 'asis'}
     dat$COMAREA_ID[which(dat$COMAREA_ID =="L31A")]<-311
     dat$COMAREA_ID[which(dat$COMAREA_ID =="L31B")]<-312
@@ -87,7 +165,7 @@ output: tint::tintPdf
       
 ```
  
-**4. Are males berried or notched?**
+**9. Are males berried or notched?**
 ```{r echo=FALSE, results = 'asis'}
     dat$SEXCHECK<-NA
     dat$SEXCHECK<- ifelse(dat$SPECCD_ID ==2550 & dat$SEXCD_ID == 1 & !is.na(dat$VNOTCH) , 1, dat$SEXCHECK)
@@ -103,7 +181,7 @@ output: tint::tintPdf
     dat$SEXCHECK <- NULL
 ```
 
-**5. Is the length between a reasonable size 30-250mm?**
+**10. Is the length between a reasonable size 30-250mm?**
 ```{r echo=FALSE, results = 'asis'}
 
     dat$CLCHECK<-NA
@@ -121,7 +199,7 @@ output: tint::tintPdf
 ```
 
 
-**6. Is Length, Shell, Disease, Sex and Condition recorded for all Lobster?** 
+**11. Is Length, Shell, Disease, Sex and Condition recorded for all Lobster?** 
 ```{r echo=FALSE, results = 'asis'}
 
     dat$LENGTHDAT<-NA
@@ -173,24 +251,31 @@ output: tint::tintPdf
 ```
 
 
-**7. Is the depth less than a maximum fishing depth ?**
+**12. Is the depth (in Fathoms) within a reasonable range ?**
 ```{r echo=FALSE, results = 'asis'}
-      dat$DEPTHCHECK<-NA
-      dat$DEPTHCHECK<-ifelse(dat$DEPTH <= 300,0,1)
+dat$DEPTHCHECK <- NA
+dat$DEPTHCHECK <- ifelse(dat$DEPTH <= 200, 0, ifelse(dat$DEPTH <= 300, 1, 2))
 
-      deepcheck<-any(dat$DEPTHCHECK ==1,na.rm=T)
-      baddepth<-which(dat$DEPTHCHECK==1)
+deepcheck_200 <- any(dat$DEPTHCHECK == 1, na.rm = TRUE)
+deepcheck_300 <- any(dat$DEPTHCHECK == 2, na.rm = TRUE)
+baddepth_200 <- which(dat$DEPTHCHECK == 1)
+baddepth_300 <- which(dat$DEPTHCHECK == 2)
 
-      if(deepcheck==T){
-        print(paste0("<br> <ul> \textcolor{red}{ERROR: Depths exceed a maximum fishing depth. Check line(s) ", paste(baddepth+1, collapse=" , "), "}", sep = " ", "</br> </ul>"))
-      }else{cat("<br> <ul> Depths within reasonable range </br> </ul>")}
+if (deepcheck_300) {
+  print(paste0("  \textcolor{red}{ERROR: Depth on line(s) ", paste(baddepth_300 + 1, collapse = " , "), " is over 300 fathoms.}"))
+}
+if (deepcheck_200) {
+  print(paste0("  \textcolor{orange}{WARNING: Depth on line(s) ", paste(baddepth_200 + 1, collapse = " , "), " is over 200 fathoms.}"))
+}
+if (!deepcheck_200 && !deepcheck_300) {
+  cat("  Depths within reasonable range  ")
+}
 
-      dat$DEPTHCHECK <- NULL
-        
+dat$DEPTHCHECK <- NULL
 ```
 
 
-**8. Were any lobster kept below the MLS for the given LFA?**
+**13. Were any lobster kept below the MLS for the given LFA?**
 ```{r echo= FALSE, results = 'asis'}
       MLS=82.5
       dat$smallretained <-0
@@ -210,7 +295,7 @@ output: tint::tintPdf
 ```
 
 
-**9. Were female between 114-124mm kept in LFA 31a?**
+**14. Were female between 114-124mm kept in LFA 31a?**
 ```{r echo = FALSE, results = 'asis'}
         dat$window<- 0
         dat$window<- ifelse(dat$COMAREA_ID %in% c(311) & dat$SEXCD_ID %in% c(2,3) & dat$SPECCD_ID == 2550  & dat$FISH_LENGTH %in% c(114:124) & dat$KEPT %in% c(1), 1, 0) 
@@ -224,7 +309,7 @@ output: tint::tintPdf
 ```
 
 
-**10. Were v-notched lobster retained in prohibited LFAs?**
+**15. Were v-notched lobster retained in prohibited LFAs?**
 ```{r echo = FALSE, results = 'asis'}
             dat$keepnotch<-0
        if(any(is.na(dat$KEPT))) dat$KEPT[which(is.na(dat$KEPT))] <- 0
@@ -239,7 +324,7 @@ output: tint::tintPdf
 ```
 
 
-**11. Is abundance greater than 1 for anything other than whelks, starfish, urchins?**
+**16. Is abundance greater than 1 for anything other than whelks, starfish, urchins?**
 ```{r echo = FALSE, results = 'asis'}
           dat$AMOUNT<-NA
           dat$AMOUNT<- ifelse((dat$SPECSCD_ID <= 1000 | dat$SPECCD_ID %in% c(2550,2513,2511,2531,2520,2526)) & (dat$ABUNDANCE > 1), 1, 0)
@@ -255,7 +340,7 @@ output: tint::tintPdf
 ```
  
  
-**12. If species is not a berried lobster does it have clutch and egg categories filled out?**
+**17. If species is not a berried lobster does it have clutch and egg categories filled out?**
 ```{r echo = FALSE, results = 'asis'}
           dat$BERRIED<-NA
           dat$BERRIED<- ifelse(dat$SPECCD_ID ==2550 & dat$SEXCD_ID %in% c(1,2) & c(!is.na(dat$CLUTCH) | !is.na(dat$EGG_STAGE)),1,0)
@@ -270,7 +355,7 @@ output: tint::tintPdf
 ```
 
 
-**13. If a lobster is berried is egg stage and clutch size recorded?**
+**18. If a lobster is berried is egg stage and clutch size recorded?**
 ```{r echo = FALSE, results = 'asis'}
           dat$BERRIES<-NA
           dat$BERRIES<- ifelse(dat$SPECCD_ID ==2550 & dat$SEXCD_ID== 3 & c(is.na(dat$CLUTCH) | is.na(dat$EGG_STAGE)),1,0)
@@ -285,7 +370,7 @@ dat$BERRIES<-NULL
 ```
 
 
-**14. Do all crab species entries have length, sex and condition recorded?**
+**19. Do all crab species entries have length, sex and condition recorded?**
 ```{r echo = FALSE, results = 'asis'}
           dat$CRABBIE<-NA
           dat$CRABBIE<- ifelse(dat$SPECCD_ID %in% c(2513,2511,2531,2520,2526) & (dat$FISH_LENGTH < 1 | is.na(dat$FISH_LENGTH)) & (!dat$SEXCD_ID %in% c(1,2,3) | is.na(dat$SEXCD_ID)), 1, 0)
@@ -311,7 +396,7 @@ dat$BERRIES<-NULL
 ```
 
 
-**15. Does anything other than a lobster have the notch category filled out?**
+**20. Does anything other than a lobster have the notch category filled out?**
 ```{r echo = FALSE, results = 'asis'}
         dat$NOTCHED<- NA
         dat$NOTCHED<- ifelse(!dat$SPECCD_ID==2550 & !is.na(dat$VNOTCH),1,0)
@@ -326,33 +411,45 @@ dat$BERRIES<-NULL
 ```
 
 
-**16. Do all Fish species entries have length, condition recorded?**
+**21. Do all Fish species entries have length, condition recorded?**
 ```{r echo = FALSE, results = 'asis'}
-      dat$FISHY<-NA
-      dat$FISHY<- ifelse(dat$SPECCD_ID <1000 & c(dat$FISH_LENGTH < 1 | is.na(dat$FISH_LENGTH)), 1, 0)
-      fishinfo<- any(dat$FISHY ==1, na.rm=T)
-        nofish<- which(dat$FISHY ==1)
-  if(fishinfo ==T){
-        print(paste0("<br> <ul> \textcolor{red}{ERROR: Check FISH LENGTH on line(s) ", paste(nofish+1, collapse=" , "),"}", "</br> </ul>",sep=" "))
-      } else {
-      cat("<br> <ul> All fish have length recorded </br> </ul>")
-    }
-    dat$FISHY<- NULL 
+dat$FISHY <- NA
+dat$FISHY <- ifelse(dat$SPECCD_ID < 1000 & (dat$FISH_LENGTH < 1 | is.na(dat$FISH_LENGTH)), 1, 0)
+fishinfo <- any(dat$FISHY == 1, na.rm = TRUE)
+nofish <- which(dat$FISHY == 1)
+if (fishinfo == TRUE) {
+    cat(paste0("<br> <ul> \\textcolor{red}{ERROR: Check FISH LENGTH on line(s) ", paste(nofish + 1, collapse = " , "), "} </br> </ul>"))
+} else {
+    cat("<br> <ul> All fish have length recorded </br> </ul>")
+}
+dat$FISHY <- NULL 
 
-      dat$CCONDAT<-NA
-      dat$CCONDAT<-ifelse(dat$SPECCD_ID %in% c(1:1000,2513,2511,2531,2520,2526)  & is.na(dat$CONDITION_CD), 1, dat$CCONDAT)
-      cconcheck<-any(dat$CCONDAT == 1, na.rm=T)
-      noccon<-which(dat$CCONDAT==1)
-    if(cconcheck == T){
-        cat(paste0(" \textcolor{red}{ERROR: Missing information for CONDITION. Check line(s) ", paste(noccon+1, collapse=" , "),"}", sep=" "))
-        } else {
-         cat("<br> <ul> All fish have condition recorded </br> </ul>")
-      }
-      dat$CCONDAT <- NULL
-  
+dat$CCONDAT <- NA
+dat$CCONDAT <- ifelse(dat$SPECCD_ID %in% c(1:1000, 2513, 2511, 2531, 2520, 2526) & is.na(dat$CONDITION_CD), 1, dat$CCONDAT)
+cconcheck <- any(dat$CCONDAT == 1, na.rm = TRUE)
+noccon <- which(dat$CCONDAT == 1)
+if (cconcheck == TRUE) {
+    cat(paste0("\\textcolor{red}{ERROR: Missing information for CONDITION. Check line(s) ", paste(noccon + 1, collapse = " , "), "}"))
+} else {
+    cat("<br> <ul> All fish have condition recorded </br> </ul>")
+}
+dat$CCONDAT <- NULL
+
+# New check for incorrect CONDITION_CD values
+dat$INCORRECT_COND <- NA
+dat$INCORRECT_COND <- ifelse(dat$SPECCD_ID < 1000 & dat$CONDITION_CD %in% c(1, 2, 3), 1, 0)
+incorrect_cond_check <- any(dat$INCORRECT_COND == 1, na.rm = TRUE)
+incorrect_cond_lines <- which(dat$INCORRECT_COND == 1)
+if (incorrect_cond_check == TRUE) {
+    cat(paste0("\\textcolor{red}{ERROR: Fish species have incorrect Condition Codes - Fish Condition can only be 0, 4, 5, 6, or 7. Check line(s) ", paste(incorrect_cond_lines + 1, collapse = " , "), "}"))
+} else {
+    cat("<br> <ul> All fish have correct condition codes </br> </ul>")
+}
+dat$INCORRECT_COND <- NULL
 ```
 
-**17. What is the trap sampling frequency per string?**
+
+**22. What is the trap sampling frequency per string?**
 ```{r echo = FALSE, results = 'asis'}
 trapnum<-as.data.frame(unique(cbind(dat$SET_NO,dat$TRAP_NO)))
 if(any(!is.na(c(trapnum$V1)))){
@@ -374,26 +471,28 @@ if(length(irrfreq)<nrow(trapfreq)){
 ```
 
 
-**18. What is the total number of traps sampled and total traps hauled**
+**23. What is the total number of traps sampled and total traps hauled**
 ```{r echo= FALSE, results = 'asis'}
 
-sampled<-length(unique(paste(dat$TRAP_NO,dat$SET_NO,sep="-")))
+sampled <- length(unique(paste(dat$TRAP_NO, dat$SET_NO, sep = "-")))
 
-if(length(sampled)>0){
+if (length(sampled) > 0) {
   cat(paste0("<br> <ul> Total number of traps sampled: ", sampled, "</br> </ul>"))
 }
 
-totaltrap<-as.data.frame(unique(cbind(dat$SET_NO, dat$NUM_HOOK_HAUL)))
+# Create a data frame with unique SET_NO and NUM_HOOK_HAUL
+totaltrap <- unique(dat[, c("SET_NO", "NUM_HOOK_HAUL")])
 
-if(sum(totaltrap$V2, na.rm = T)< sampled){
-  print("<br> <ul> \textcolor{red}{ERROR: Check SET NO and NUM HOOK HAUL numbers do not add up to total traps sampled.}, </br> </ul>")
-} else {cat(paste0("<br> <ul> Total number of traps hauled: ", sum(totaltrap$V2),"</br> </ul>"))
+# Check if the sum of NUM_HOOK_HAUL is less than the number of sampled traps
+if (sum(totaltrap$NUM_HOOK_HAUL, na.rm = TRUE) < sampled) {
+  cat("<br> <ul> <span style='color:red;'>ERROR: Check SET NO and NUM HOOK HAUL numbers do not add up to total traps sampled.</span> </br> </ul>")
+} else {
+  cat(paste0("<br> <ul> Total number of traps hauled: ", sum(totaltrap$NUM_HOOK_HAUL, na.rm = TRUE), "</br> </ul>"))
 }
-  
 ```
 
 
-**19. What was the total number of lobsters and other species sampled?**
+**24. What was the total number of lobsters and other species sampled?**
 ```{r echo=FALSE, results = 'asis'}
 numlob<-length(which(dat$SPECCD_ID==2550))
 
@@ -419,47 +518,49 @@ if(length(numother>0)){
 
 **Does the Trip count to Target?**
 ```{r echo=FALSE, results = 'asis'}
-nums<-length(dat$SPECCD_ID)
+nums <- length(dat$SPECCD_ID)
 
-if(length(numlob>0)){
-  cat(paste0("<br> <ul> Total number of individuals sampled: ", nums, "</br> </ul>"))
-      
-}
-sampled<-length(unique(paste(dat$TRAP_NO,dat$SET_NO,sep="-")))
-
-if(length(sampled)>0){
-  cat(paste0("<br> <ul> Total number of traps sampled: ", sampled, "</br> </ul>"))
+if (nums > 0) {
+  cat(paste0("  Total number of individuals sampled: ", nums, " "))
 }
 
-    ll<-unique(dat$COMAREA_ID)
-    lll<-ifelse(nchar(ll)==3,3,4)
-    ll<-substr(ll,2,lll)
-    mm = as.numeric(substr(strsplit(nm,"-")[[1]][2],3,4))
-  out = c()
-  if(ll %in% c(33,34)) {
-    if(mm %in% c(11,12,4,5)){
-    i = ifelse(nums>=300 | sampled>=25,'Good','Not Enough')  
-    }
-  if(mm %in% c(1,2,3)){
-    i = ifelse(nums>=300 | sampled>=50,'Good','Not Enough')  
-      }
-    }
-    
-  if(ll %in% c(35)) {
-    if(mm %in% c(10,11,12,5,6,7)){
-    i = ifelse(nums>=300 | sampled>=25,'Good','Not Enough')  
-    }
-  if(mm %in% c(1,2,3,4)){
-    i = ifelse(nums>=300 | sampled>=50,'Good','Not Enough')  
-      }
-    }
-  
-if(i=='Good'){
-  print("<br> <ul> \textcolor{green}{This trip will count toward targets.}, </br> </ul>")
+sampled <- length(unique(paste(dat$TRAP_NO, dat$SET_NO, sep = "-")))
+
+if (sampled > 0) {
+  cat(paste0("  Total number of traps sampled: ", sampled, " "))
+}
+
+ll <- unique(dat$COMAREA_ID)
+lll <- ifelse(nchar(ll) == 3, 3, 4)
+ll <- substr(ll, 2, lll)
+mm <- as.numeric(substr(strsplit(nm, "-")[[1]][2], 3, 4))
+out <- c()
+i <- 'Not Enough'  # Initialize i with a default value
+
+if (ll %in% c(33, 34)) {
+  if (mm %in% c(11, 12, 4, 5)) {
+    i <- ifelse(nums >= 300 | sampled >= 25, 'Good', 'Not Enough')
+  }
+  if (mm %in% c(1, 2, 3)) {
+    i <- ifelse(nums >= 300 | sampled >= 50, 'Good', 'Not Enough')
+  }
+}
+
+if (ll %in% c(35)) {
+  if (mm %in% c(10, 11, 12, 5, 6, 7)) {
+    i <- ifelse(nums >= 300 | sampled >= 25, 'Good', 'Not Enough')
+  }
+  if (mm %in% c(1, 2, 3, 4)) {
+    i <- ifelse(nums >= 300 | sampled >= 50, 'Good', 'Not Enough')
+  }
+}
+
+if (i == 'Good') {
+  cat("  \\textcolor{green}{This trip will count toward targets.}  ")
 } 
-if(i=='Not Enough'){
-  print("<br> <ul> \textcolor{red}{This trip will NOT count toward targets.}, </br> </ul>")
-} 
+if (i == 'Not Enough') {
+  cat("  \\textcolor{red}{This trip will NOT count toward targets.}  ")
+}
 ```
   
   	
