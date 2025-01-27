@@ -13,8 +13,8 @@
   options(stringsAsFactors = F)
 
   
-#  oracle.username="COOKA"
- # oracle.password="bzz7plf"
+#  oracle.username=
+ # oracle.password=
 
 #set working directory
 local=T
