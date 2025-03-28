@@ -20,7 +20,7 @@
 local=T
 fd = file.path('C:/Users/cooka/')
 setwd(fd)
-dataGroup = 'SWLSS' #or whichever group has submitted the data and is considered the 'data owner'
+dataGroup = 'SWLSS' #or whichever group has submitted the data and is considered the 'data owner' ***********CHECK GROUP ****************
 
 ##################################################################################################################################
 #THIS BLOCK IS FOR EDITED and Unedited DATA###
